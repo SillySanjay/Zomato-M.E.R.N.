@@ -6,7 +6,7 @@ const foodPartnerModel = require("../models/foodpartner.model")
 
 
 const registerUser = async (req, resp) => {
-    const { name, email, password } = req.body;
+    const { name, email, password} = req.body;
 
     const isUserAlreadyExists = await userModel.findOne({ email })
 
@@ -21,22 +21,22 @@ const registerUser = async (req, resp) => {
     const user = await userModel.create({
         name,
         email,
-        password: hashpassword
+        password: hashpassword,
     })
-    
-    const token = jwt.sign({
-        _id: user.id,
-    }, process.env.JWT_SECRET)
 
-    resp.cookie("token", token);
-    resp.status(201).json({
-        message: "user created successfully",
-        user: {
-            _id: user.id,
-            name: user.name,
-            email: user.email
-        }
-    })
+const token = jwt.sign({
+    _id: user.id,
+}, process.env.JWT_SECRET)
+
+resp.cookie("token", token);
+resp.status(201).json({
+    message: "user created successfully",
+    user: {
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+    }
+})
 }
 
 const loginUser = async (req, resp) => {
@@ -79,11 +79,11 @@ const logoutUser = (req, resp) => {
 }
 
 const registerFoodPartner = async (req, resp) => {
-    const { name, email, password } = req.body;
-    const isAccountAlreadyExistis = await foodPartnerModel.find({ email });
+    const { name, email, password, phone, contactName, address } = req.body;
+    const isAccountAlreadyExistis = await foodPartnerModel.findOne({ email });
 
     if (isAccountAlreadyExistis) {
-        resp.status(400).json({
+        return resp.status(400).json({
             message: "Food Partner accoount already exists"
         })
     }
@@ -91,10 +91,13 @@ const registerFoodPartner = async (req, resp) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const foodPartner = await foodPartnerModel.create({
         name,
-        email,
-        password: hashedPassword
+        email, 
+        phone, 
+        contactName, 
+        address,
+        password: hashedPassword,
     })
-
+    console.log(foodPartner);
     const token = jwt.sign({
         _id: foodPartner.id,
     }, process.env.JWT_SECRET)
@@ -104,44 +107,47 @@ const registerFoodPartner = async (req, resp) => {
         foodPartner: {
             _id: foodPartner.id,
             name: foodPartner.name,
-            email: foodPartner.email
+            email: foodPartner.email,
+            phone: foodPartner.phone,
+            contactName: foodPartner.contactName,
+            address: foodPartner.address
         }
     })
 }
 
-const loginFoodPartner = async(req, resp) => {
-    const {email,password} = req.body;
+const loginFoodPartner = async (req, resp) => {
+    const { email, password } = req.body;
     // console.log(email,password)
-    const foodPartner = await foodPartnerModel.findOne({email});
-    if(!foodPartner){
+    const foodPartner = await foodPartnerModel.findOne({ email });
+    if (!foodPartner) {
         resp.status(400).json({
-            message:"invalid email and password"
+            message: "invalid email and password"
         })
     }
 
     const isPasswordValid = await bcrypt.compare(password, foodPartner.password);
-    if(!isPasswordValid){
+    if (!isPasswordValid) {
         return resp.status(400).json({
-            message:"Invalid name or password"
+            message: "Invalid name or password"
         })
     }
 
-    const token= jwt.sign({
+    const token = jwt.sign({
         _id: foodPartner.id,
-    },process.env.JWT_SECRET);
+    }, process.env.JWT_SECRET);
 
     // console.log(token)
-    resp.cookie("token",token)
-    
+    resp.cookie("token", token)
+
     resp.status(200).json({
-        message:"Food Partner Login Successfully"
+        message: "Food Partner Login Successfully"
     })
 }
 
-const logoutFoodPartner = (req,resp)=>{
+const logoutFoodPartner = (req, resp) => {
     resp.clearCookie("token");
     resp.status(200).json({
-        message:"food partner loged out successfully"
+        message: "food partner loged out successfully"
     })
 }
 
@@ -153,5 +159,5 @@ module.exports = {
     registerFoodPartner,
     loginFoodPartner,
     logoutFoodPartner
-    
+
 }

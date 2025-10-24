@@ -1,0 +1,51 @@
+:root {
+  /* Colors */
+  --primary-color: #e23744;
+  --secondary-color: #282c3f;
+  --text-primary: #1c1c1c;
+  --text-secondary: #686b78;
+  --background-primary: #ffffff;
+  --background-secondary: #f8f8f8;
+  --input-background: #f5f5f5;
+  --border-color: #e9e9eb;
+  --error-color: #ff3b30;
+  --success-color: #34c759;
+
+  /* Spacing */
+  --spacing-xs: clamp(4px, 1vw, 4px);
+  --spacing-sm: clamp(6px, 2vw, 8px);
+  --spacing-md: clamp(12px, 3vw, 16px);
+  --spacing-lg: clamp(20px, 4vw, 24px);
+  --spacing-xl: clamp(24px, 5vw, 32px);
+
+  /* Border Radius */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+
+  /* Font Sizes */
+  --font-size-xs: clamp(10px, 3vw, 12px);
+  --font-size-sm: clamp(12px, 3.5vw, 14px);
+  --font-size-md: clamp(14px, 4vw, 16px);
+  --font-size-lg: clamp(18px, 5vw, 20px);
+  --font-size-xl: clamp(20px, 6vw, 24px);
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+
+  /* Transitions */
+  --transition-speed: 0.2s;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1a1;
+    --background-primary: #121212;
+    --background-secondary: #1e1e1e;
+    --input-background: #2d2d2d;
+    --border-color: #333333;
+  }
+}
